@@ -1,0 +1,25 @@
+<svg width="260" height="80" viewBox="0 0 260 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Icon (Size increased) -->
+  <svg x="0" y="18" width="40" height="40" viewBox="0 0 24 24">
+    <path 
+      stroke="#22C55E" 
+      stroke-linecap="round" 
+      stroke-linejoin="round" 
+      stroke-width="2.5" 
+      d="M8 8v8m0-8h8M8 8H6a2 2 0 1 1 2-2v2Zm0 8h8m-8 0H6a2 2 0 1 0 2 2v-2Zm8 0V8m0 8h2a2 2 0 1 1-2 2v-2Zm0-8h2a2 2 0 1 0-2-2v2Z"
+    />
+  </svg>
+
+  <!-- Text (Bigger) -->
+  <text 
+    x="60" 
+    y="48" 
+    font-family="Inter, Arial, sans-serif" 
+    font-size="40" 
+    font-weight="600" 
+    fill="#22C55E"
+  >
+    Flash.ai
+  </text>
+</svg>
