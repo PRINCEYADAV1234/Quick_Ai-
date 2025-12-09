@@ -45,10 +45,27 @@ if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !pr
 
 const app = express()
 
-await connectCloudinary();
+// Initialize Cloudinary connection
+let cloudinaryInitialized = false;
+async function initializeCloudinary() {
+  if (!cloudinaryInitialized) {
+    await connectCloudinary();
+    cloudinaryInitialized = true;
+  }
+}
+
+// Middleware to ensure Cloudinary is initialized
+app.use(async (req, res, next) => {
+  if (!cloudinaryInitialized) {
+    await initializeCloudinary();
+  }
+  next();
+});
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'],
+  origin: process.env.VERCEL_ENV 
+    ? ['https://your-frontend-domain.vercel.app'] // Add your Vercel frontend URL
+    : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -71,10 +88,16 @@ app.get('/health', (req, res) => {
 app.use(requireAuth());
 app.use('/api/ai',aiRouter)
 app.use('/api/user',userRouter)
-const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, ()=>{
-    console.log("server is live on the port", 5000)
-})
+// Export handler for Vercel serverless functions
+export default app;
+
+// Only start server if running locally (not in Vercel)
+if (process.env.VERCEL !== '1') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, ()=>{
+    console.log("server is live on the port", PORT)
+  })
+}
 
 
