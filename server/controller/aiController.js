@@ -7,7 +7,7 @@ import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);  // 👈 allows CommonJS import in ESM
-const pdfParse = require("pdf-parse"); 
+
 
 export const generateArticle = async (req, res) => {
   try {
@@ -382,6 +382,7 @@ export const removeImageObject= async (req, res) => {
 
 export const resumeReview= async (req, res) => {
   try {
+    const pdfParse = require("pdf-parse"); 
     const { userId } = req.auth;
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'Resume file is required' });
@@ -421,37 +422,7 @@ export const resumeReview= async (req, res) => {
     }
 
     const dataBuffer = fs.readFileSync(resume.path);
-//     let pdfData;
-//     try {
-//       // Try parsing up to 10 pages first
-//       pdfData = await pdfParse(dataBuffer, {
-//   max: 10,
-//   pagerender: () => ""
-// });
-
-//     } catch (e1) {
-//       console.error("PDF parse failed (max:10). Retrying with 2 pages...", e1?.message);
-//       try {
-//         pdfData = await pdfParse(dataBuffer, { max: 2 });
-//       } catch (e2) {
-//         console.error("PDF parse failed (max:2). Retrying with 1 page...", e2?.message);
-//         try {
-//           pdfData = await pdfParse(dataBuffer, { max: 1 });
-//         } catch (e3) {
-//           console.error("PDF parsing error (all attempts):", e3);
-//           if (fs.existsSync(resume.path)) {
-//             fs.unlinkSync(resume.path);
-//           }
-//           return res.status(400).json({
-//             success: false,
-//             message: "Failed to parse PDF. If it's a scanned image or protected PDF, please export as a regular text PDF or upload a different file."
-//           });
-//         }
-//       }
-//     }
-
-    
-let pdfData;
+    let pdfData;
 try {
   pdfData = await pdfParse(dataBuffer, {
     max: 10,
@@ -482,7 +453,6 @@ try {
     }
   }
 }
-
     const text = (pdfData?.text || "").trim();
     if (!text || text.length < 50) {
       if (fs.existsSync(resume.path)) {
