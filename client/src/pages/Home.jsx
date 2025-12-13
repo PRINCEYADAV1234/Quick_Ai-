@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../component/Navbar.jsx'
+import Navbar from '../component/Navbar'
 import Hero from '../component/Hero'
 import AiTools from '../component/AiTools'
 import Testimonial from '../component/Testimonial'
