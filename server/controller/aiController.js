@@ -421,30 +421,64 @@ export const resumeReview= async (req, res) => {
     }
 
     const dataBuffer = fs.readFileSync(resume.path);
+    // let pdfData;
+    // try {
+    //   // Try parsing up to 10 pages first
+    //   pdfData = await pdfParse(dataBuffer, { max: 10 });
+    // } catch (e1) {
+    //   console.error("PDF parse failed (max:10). Retrying with 2 pages...", e1?.message);
+    //   try {
+    //     pdfData = await pdfParse(dataBuffer, { max: 2 });
+    //   } catch (e2) {
+    //     console.error("PDF parse failed (max:2). Retrying with 1 page...", e2?.message);
+    //     try {
+    //       pdfData = await pdfParse(dataBuffer, { max: 1 });
+    //     } catch (e3) {
+    //       console.error("PDF parsing error (all attempts):", e3);
+    //       if (fs.existsSync(resume.path)) {
+    //         fs.unlinkSync(resume.path);
+    //       }
+    //       return res.status(400).json({
+    //         success: false,
+    //         message: "Failed to parse PDF. If it's a scanned image or protected PDF, please export as a regular text PDF or upload a different file."
+    //       });
+    //     }
+    //   }
+    // }
+
+    // updated part for the pdf parser
     let pdfData;
+try {
+  pdfData = await pdfParse(dataBuffer, {
+    max: 10,
+    pagerender: () => ""
+  });
+} catch (e1) {
+  console.error("PDF parse failed (max:10). Retrying with 2 pages...", e1?.message);
+  try {
+    pdfData = await pdfParse(dataBuffer, {
+      max: 2,
+      pagerender: () => ""
+    });
+  } catch (e2) {
+    console.error("PDF parse failed (max:2). Retrying with 1 page...", e2?.message);
     try {
-      // Try parsing up to 10 pages first
-      pdfData = await pdfParse(dataBuffer, { max: 10 });
-    } catch (e1) {
-      console.error("PDF parse failed (max:10). Retrying with 2 pages...", e1?.message);
-      try {
-        pdfData = await pdfParse(dataBuffer, { max: 2 });
-      } catch (e2) {
-        console.error("PDF parse failed (max:2). Retrying with 1 page...", e2?.message);
-        try {
-          pdfData = await pdfParse(dataBuffer, { max: 1 });
-        } catch (e3) {
-          console.error("PDF parsing error (all attempts):", e3);
-          if (fs.existsSync(resume.path)) {
-            fs.unlinkSync(resume.path);
-          }
-          return res.status(400).json({
-            success: false,
-            message: "Failed to parse PDF. If it's a scanned image or protected PDF, please export as a regular text PDF or upload a different file."
-          });
-        }
-      }
+      pdfData = await pdfParse(dataBuffer, {
+        max: 1,
+        pagerender: () => ""
+      });
+    } catch (e3) {
+      console.error("PDF parsing error (all attempts):", e3);
+      if (fs.existsSync(resume.path)) fs.unlinkSync(resume.path);
+      return res.status(400).json({
+        success: false,
+        message:
+          "Failed to parse PDF. Please upload a text-based (non-scanned) PDF."
+      });
     }
+  }
+}
+
 
     const text = (pdfData?.text || "").trim();
     if (!text || text.length < 50) {
