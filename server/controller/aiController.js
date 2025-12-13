@@ -7,7 +7,7 @@ import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);  // 👈 allows CommonJS import in ESM
-const pdfParse = require("pdf-parse"); 
+
 
 export const generateArticle = async (req, res) => {
   try {
@@ -382,6 +382,7 @@ export const removeImageObject= async (req, res) => {
 
 export const resumeReview= async (req, res) => {
   try {
+    const pdfParse = require("pdf-parse"); 
     const { userId } = req.auth;
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'Resume file is required' });
