@@ -2,6 +2,17 @@
 
 A comprehensive AI-powered SaaS platform that empowers users to generate content, manipulate images, and enhance their productivity using cutting-edge AI tools. Built with React (Vite), Node.js/Express, and deployed on Vercel.
 
+## 🚀 Live Demo
+
+[![Frontend](https://img.shields.io/badge/Frontend-Live-brightgreen)](https://your-frontend-url.vercel.app)
+[![Backend](https://img.shields.io/badge/Backend-API-blue)](https://your-backend-url.vercel.app)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black)](https://vercel.com)
+
+- **🌐 Frontend (Client)**: [Live Site](https://your-frontend-url.vercel.app)
+- **🔧 Backend (API)**: [API Endpoint](https://your-backend-url.vercel.app) | [Health Check](https://your-backend-url.vercel.app/health)
+
+> **📝 Note**: Replace `your-frontend-url.vercel.app` and `your-backend-url.vercel.app` with your actual Vercel deployment URLs. You can find these in your Vercel dashboard after deployment.
+
 ## Table of Contents
 
 - [Project Overview](#project-overview)
